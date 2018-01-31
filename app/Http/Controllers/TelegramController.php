@@ -51,11 +51,11 @@ class TelegramController extends Controller
         return response()->json(['status' => 'success'], 200);
     }
 
-    public function getChatMembersCount(Request $request)
+    public function getLatestActivities(Request $request)
     {
         $data = $request->all();
 
-        $response = $this->guzzleHttp->post(env('API_URL') . env('TELEGRAM_BOT_TOKEN') . '/' . env('METHOD_API_GET_CHAT_MEMBERS'), [
+        $response = $this->guzzleHttp->post(env('TELEGRAM_API_URL') . env('TELEGRAM_BOT_TOKEN') . '/' . env('TELEGRAM_GET_UPDATES'), [
             'json' => [
                 'chat_id' => $data['chat_id']
             ]
@@ -63,19 +63,6 @@ class TelegramController extends Controller
 
         $jsonResponse = json_decode($response->getBody());
 
-        if ($jsonResponse->result >= 99) {
-            return $this->sendMessageCountMembers();
-        }
-        return response()->json(['status' => 'success', 'data' => ['members' => $jsonResponse->result]], 200);
-    }
-
-    public function sendMessageCountMembers()
-    {
-        $this->telegram->sendMessage([
-            'chat_id' => env('CHAT_ID'),
-            'text' => 'Já temos mais de 98 pessoas no grupo, estamos de parabéns!',
-        ]);
-
-        return response()->json(['status' => 'success'], 200);
+        return response()->json(['status' => 'success', 'data' => ['activities' => $jsonResponse->result]], 200);
     }
 }

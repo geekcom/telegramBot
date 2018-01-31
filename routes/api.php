@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::post('v1/messages', 'TelegramController@sendMessages');
 
-Route::post('v1/count_chat_members', 'TelegramController@getChatMembersCount');
+Route::post('v1/latestActivities', 'TelegramController@getLatestActivities');
 
 Route::post('v1/setwebhook', 'TelegramController@setWebHook');
 
